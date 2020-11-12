@@ -1,5 +1,5 @@
 {
-    "name": "yii-dream-team/yii2-perfect-money",
+    "name": "yanmandev/yii2-perfect-money",
     "description": "PerfectMoney component for Yii2",
     "type": "yii2-extension",
     "license": "MIT",
@@ -24,7 +24,7 @@
     },
     "autoload": {
         "psr-4": {
-            "yiidreamteam\\perfectmoney\\": "./src"
+            "yanmandev\\perfectmoney\\": "./src"
         }
     }
 }
