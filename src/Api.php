@@ -77,6 +77,16 @@ class Api extends \yii\base\Component
     }
 
     /**
+     * Get account wallet balance
+     *
+     * @return array|bool
+     */
+    public function balance()
+    {
+        return $this->call('balance');
+    }
+
+    /**
      * Performs api call
      *
      * @param string $script Api script name
@@ -93,29 +103,21 @@ class Api extends \yii\base\Component
         $httpParams = http_build_query(ArrayHelper::merge($defaults, $params));
         $scriptUrl = "https://perfectmoney.is/acct/{$script}.asp?{$httpParams}";
 
-        $queryResult = @file_get_contents($scriptUrl);
+        $result = @file_get_contents($scriptUrl);
 
-        if ($queryResult === false)
+        if ($result === false)
             return false;
 
-        if (!preg_match_all("/<input name='(.*)' type='hidden' value='(.*)'>/", $queryResult, $items, PREG_SET_ORDER))
-            return false;
+        if (preg_match_all("/<input name='(.*)' type='hidden' value='(.*)'>/", $result, $items, PREG_SET_ORDER)) {
+            $result = [];
 
-        $result = [];
-        foreach ($items as $item)
-            $result[$item[1]] = $item[2];
+            foreach ($items as $item)
+                $result[$item[1]] = $item[2];
 
-        return $result;
-    }
+            return $result;
+        }
 
-    /**
-     * Get account wallet balance
-     *
-     * @return array|bool
-     */
-    public function balance()
-    {
-        return $this->call('balance');
+        return trim($result);
     }
 
     /**
